@@ -6,7 +6,6 @@ import 'package:project/widget/home/sidebar.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:project/Models/meeting.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -38,10 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       key: _scaffoldKey,
       // sidebar menu
-      drawer: Drawer(
-        width: width! * 0.9,
-        child: const Siderbar()
-      ),
+      drawer: Drawer(width: width! * 0.9, child: const Siderbar()),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(8),
@@ -192,17 +188,14 @@ class _HomeScreenState extends State<HomeScreen> {
   void selectionTap(CalendarTapDetails details) {
     _text = DateFormat('dd MMMM yyyy').format(details.date!).toString();
     if (details.appointments != null && details.appointments!.isNotEmpty) {
-      // วนลูปผ่าน appointments (ซึ่งแต่ละรายการคือ Meeting object)
       details.appointments?.forEach((appointment) {
-        final Appointment meeting =
-            appointment as Appointment; // แปลงเป็น Meeting object
+        final Appointment meeting = appointment as Appointment; // แปลงเป็น Meeting object
 
         // ปริ้นข้อมูลภายใน Meeting object
         print('Meeting Title: ${meeting.subject}');
         print('All: ${meeting.isAllDay}');
         print('from: ${meeting.startTime}');
         print('to: ${meeting.endTime}');
-
       });
     } else {
       print('No Appointments');
@@ -251,50 +244,110 @@ class _HomeScreenState extends State<HomeScreen> {
                 )
               ],
             ),
-            // Appointment 
+            // Appointment
             Expanded(
               child: details.appointments != null &&
                       details.appointments!.isNotEmpty
                   ? ListView(
                       children: details.appointments!.map((appointment) {
                         final Appointment meeting = appointment as Appointment;
+                        var form = DateFormat('dd').format(meeting.startTime);
+                        var to = DateFormat('dd').format(meeting.endTime);
+                        var select = DateFormat('dd').format(details.date!);
+
                         return Padding(
                           padding: const EdgeInsets.all(10),
-                          child: Row(
-                            children: [
-                              Column(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 10, right: 10),
+                          child: InkWell(
+                            onTap: () {
+                              print('111111111');
+                            },
+                            child: Row(
+                              children: [
+                                if (!meeting.isAllDay)
+                                  Column(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 10, right: 10),
+                                        child: Text(
+                                          DateFormat('hh:mm a')
+                                              .format(meeting.startTime),
+                                          style: const TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ),
+                                      if (form != to && select == to)
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                              left: 10, right: 10),
+                                          child: Text(
+                                            DateFormat('hh:mm a')
+                                                .format(meeting.endTime),
+                                            style: const TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.black45,
+                                            ),
+                                          ),
+                                        )
+                                      else if (form != to && select != to)
+                                        const Padding(
+                                          padding: EdgeInsets.only(
+                                              left: 10, right: 10),
+                                          child: Text(
+                                            '12:00 AM',
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.black45,
+                                            ),
+                                          ),
+                                        )
+                                      else
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                              left: 10, right: 10),
+                                          child: Text(
+                                            DateFormat('hh:mm a')
+                                                .format(meeting.endTime),
+                                            style: const TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.black45,
+                                            ),
+                                          ),
+                                        ),
+                                    ],
+                                  )
+                                else // กรณีเป็น All Day
+                                  const Padding(
+                                    padding:
+                                        EdgeInsets.only(left: 30, right: 10),
                                     child: Text(
-                                      DateFormat('hh:mm a').format(meeting.startTime),
-                                      style: const TextStyle(
-                                          fontSize: 16, fontWeight: FontWeight.bold),
+                                      'All Day',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
                                   ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 10, right: 10),
-                                    child: Text(
-                                      DateFormat('hh:mm a').format(meeting.endTime),
-                                      style: const TextStyle(
-                                          fontSize: 16, fontWeight: FontWeight.bold),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Container(
-                                color: meeting.color,
-                                height: 40,
-                                width: 2
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 10, right: 10),
-                                child: Text(
-                                  meeting.subject,
-                                  style: const TextStyle(fontSize: 16),
+                                Container(
+                                  color: meeting.color,
+                                  height: 40,
+                                  width: 2,
                                 ),
-                              ),
-                            ],
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 10, right: 10),
+                                  child: Text(
+                                    meeting.subject,
+                                    style: const TextStyle(fontSize: 16),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         );
                       }).toList(),
@@ -312,15 +365,4 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     ).whenComplete(() {});
   }
-
-  // data source
-}
-
-class _DataSource extends CalendarDataSource {
-  _DataSource(this.source);
-
-  List<Appointment> source;
-
-  @override
-  List<dynamic> get appointments => source;
 }

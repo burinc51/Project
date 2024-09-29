@@ -26,17 +26,17 @@ DataSource getCalendarDataSource() {
     color: Colors.lightBlueAccent,
   ));
   appointments.add(Appointment(
-    startTime: DateTime.now().add(const Duration(hours: 2, days: -2)),
-    endTime: DateTime.now().add(const Duration(hours: 4, days: -2)),
+    startTime: DateTime.now().add(const Duration(hours: 2, days: -3)),
+    endTime: DateTime.now().add(const Duration(hours: 3, days: -2)),
     subject: 'Performance check',
     color: Colors.amber,
   ));
-  appointments.add(Appointment(
-    startTime: DateTime.now().add(const Duration(hours: 6, days: -3)),
-    endTime: DateTime.now().add(const Duration(hours: 7, days: -3)),
-    subject: 'Support',
-    color: Colors.green,
-  ));
+  // appointments.add(Appointment(
+  //   startTime: DateTime.now().add(const Duration(hours: 6, days: -3)),
+  //   endTime: DateTime.now().add(const Duration(hours: 7, days: -3)),
+  //   subject: 'Support',
+  //   color: Colors.green,
+  // ));
   appointments.add(Appointment(
     startTime: DateTime.now().add(const Duration(hours: 6, days: 2)),
     endTime: DateTime.now().add(const Duration(hours: 7, days: 2)),
