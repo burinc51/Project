@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:project/controller/data_source.dart';
 import 'package:project/controller/hex_color.dart';
 import 'package:project/widget/daycell.dart';
+import 'package:project/widget/home/sidebar.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/scheduler.dart';
-
-import '../../Models/meeting.dart';
+import 'package:project/Models/meeting.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -16,6 +17,8 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final CalendarController _controller = CalendarController();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   String? _headerText;
   double? width, cellWidth;
   bool monthChk = false;
@@ -33,6 +36,12 @@ class _HomeScreenState extends State<HomeScreen> {
     width = MediaQuery.of(context).size.width;
     cellWidth = ((width! - 26) / 7);
     return Scaffold(
+      key: _scaffoldKey,
+      // sidebar menu
+      drawer: Drawer(
+        width: width! * 0.9,
+        child: const Siderbar()
+      ),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(8),
@@ -43,25 +52,36 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 10),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: const Color.fromARGB(255, 223, 223, 223),
-                      borderRadius: BorderRadius.circular(5),
+                Row(
+                  children: [
+                    IconButton(
+                      icon: const Icon(
+                        Icons.menu,
+                        color: Colors.black,
+                        size: 24,
+                      ),
+                      onPressed: () {
+                        _scaffoldKey.currentState?.openDrawer();
+                      },
                     ),
-                    width: 150,
-                    height: 40,
-                    child: Center(
-                      child: Text(_headerText!,
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(
-                              fontFamily: 'Sora',
-                              fontSize: 16,
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold)),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: const Color.fromARGB(255, 223, 223, 223),
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      width: 150,
+                      height: 40,
+                      child: Center(
+                        child: Text(_headerText!,
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
+                                fontFamily: 'Sora',
+                                fontSize: 16,
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold)),
+                      ),
                     ),
-                  ),
+                  ],
                 ),
                 DayCellWidget(
                   width: cellWidth,
@@ -82,7 +102,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     selectionDecoration: const BoxDecoration(
                       color: Colors.black12,
                     ),
-                    dataSource: MeetingDataSource(_getDataSource()),
+                    dataSource: getCalendarDataSource(),
                     monthViewSettings: const MonthViewSettings(
                       appointmentDisplayMode:
                           MonthAppointmentDisplayMode.appointment,
@@ -93,7 +113,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           .format(viewChangedDetails.visibleDates[
                               viewChangedDetails.visibleDates.length ~/ 2])
                           .toString();
-                      SchedulerBinding.instance.addPostFrameCallback((duration) {
+                      SchedulerBinding.instance
+                          .addPostFrameCallback((duration) {
                         setState(() {});
                       });
                     },
@@ -102,20 +123,6 @@ class _HomeScreenState extends State<HomeScreen> {
               ],
             ),
           ),
-        ),
-      ),
-      drawer: Drawer(
-        child: ListView(
-          // Important: Remove any padding from the ListView.
-          padding: EdgeInsets.zero,
-          children: const [
-            DrawerHeader(
-              decoration: BoxDecoration(
-                color: Colors.blue,
-              ),
-              child: Text('Drawer Header'),
-            ),
-          ],
         ),
       ),
       // backgroundColor: hexToColor('#DFDFDF'),
@@ -184,6 +191,23 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void selectionTap(CalendarTapDetails details) {
     _text = DateFormat('dd MMMM yyyy').format(details.date!).toString();
+    if (details.appointments != null && details.appointments!.isNotEmpty) {
+      // วนลูปผ่าน appointments (ซึ่งแต่ละรายการคือ Meeting object)
+      details.appointments?.forEach((appointment) {
+        final Appointment meeting =
+            appointment as Appointment; // แปลงเป็น Meeting object
+
+        // ปริ้นข้อมูลภายใน Meeting object
+        print('Meeting Title: ${meeting.subject}');
+        print('All: ${meeting.isAllDay}');
+        print('from: ${meeting.startTime}');
+        print('to: ${meeting.endTime}');
+
+      });
+    } else {
+      print('No Appointments');
+    }
+
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -211,10 +235,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     height: 2,
                     width: MediaQuery.of(context).size.width / 5,
                   ),
-                )
-                // Text(_text)
+                ),
               ],
             ),
+            // Show Date
             Row(
               children: [
                 Padding(
@@ -227,7 +251,62 @@ class _HomeScreenState extends State<HomeScreen> {
                 )
               ],
             ),
-            // LayoutBuilder(builder: (BuildContext context,)),
+            // Appointment 
+            Expanded(
+              child: details.appointments != null &&
+                      details.appointments!.isNotEmpty
+                  ? ListView(
+                      children: details.appointments!.map((appointment) {
+                        final Appointment meeting = appointment as Appointment;
+                        return Padding(
+                          padding: const EdgeInsets.all(10),
+                          child: Row(
+                            children: [
+                              Column(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 10, right: 10),
+                                    child: Text(
+                                      DateFormat('hh:mm a').format(meeting.startTime),
+                                      style: const TextStyle(
+                                          fontSize: 16, fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 10, right: 10),
+                                    child: Text(
+                                      DateFormat('hh:mm a').format(meeting.endTime),
+                                      style: const TextStyle(
+                                          fontSize: 16, fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Container(
+                                color: meeting.color,
+                                height: 40,
+                                width: 2
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 10, right: 10),
+                                child: Text(
+                                  meeting.subject,
+                                  style: const TextStyle(fontSize: 16),
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      }).toList(),
+                    )
+                  : const Center(
+                      child: Text(
+                        'No Appointments Available',
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+            ),
           ],
         ),
       ),
@@ -235,17 +314,13 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   // data source
-  List<Meeting> _getDataSource() {
-    final List<Meeting> meetings = <Meeting>[];
-    final DateTime today = DateTime.now();
-    final DateTime startTime =
-        DateTime(today.year, today.month, today.day, 9, 0, 0);
-    final DateTime endTime = startTime.add(const Duration(hours: 6));
-    final DateTime endTime_1 = startTime.add(const Duration(days: 24));
-    meetings.add(Meeting('Conference AAAAAAAAAAAAAAAAA', startTime, endTime,
-        const Color(0xFF0F8644), false));
-    meetings.add(Meeting('Conference BBBBBBBBBBBBBBBBB', startTime, endTime_1,
-        const Color.fromARGB(255, 97, 130, 100), false));
-    return meetings;
-  }
+}
+
+class _DataSource extends CalendarDataSource {
+  _DataSource(this.source);
+
+  List<Appointment> source;
+
+  @override
+  List<dynamic> get appointments => source;
 }
