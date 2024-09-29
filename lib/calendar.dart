@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:project/daycell.dart';
+import 'package:project/widget/daycell.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/scheduler.dart';
