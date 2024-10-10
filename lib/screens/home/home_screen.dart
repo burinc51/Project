@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:intl/intl.dart';
 import 'package:project/controller/data_source.dart';
-import 'package:project/controller/hex_color.dart';
 import 'package:project/widget/daycell.dart';
 import 'package:project/widget/home/sidebar.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
-import 'package:intl/intl.dart';
-import 'package:flutter/scheduler.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -37,7 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       key: _scaffoldKey,
       // sidebar menu
-      drawer: Drawer(width: width! * 0.9, child: const Siderbar()),
+      drawer: Drawer(width: width! * 0.5, child: const Siderbar()),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(8),
@@ -189,7 +188,8 @@ class _HomeScreenState extends State<HomeScreen> {
     _text = DateFormat('dd MMMM yyyy').format(details.date!).toString();
     if (details.appointments != null && details.appointments!.isNotEmpty) {
       details.appointments?.forEach((appointment) {
-        final Appointment meeting = appointment as Appointment; // แปลงเป็น Meeting object
+        final Appointment meeting =
+            appointment as Appointment; // แปลงเป็น Meeting object
 
         // ปริ้นข้อมูลภายใน Meeting object
         print('Meeting Title: ${meeting.subject}');
