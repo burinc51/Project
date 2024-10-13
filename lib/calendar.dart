@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:project/widget/daycell.dart';
-import 'package:syncfusion_flutter_calendar/calendar.dart';
-import 'package:intl/intl.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:gr_planner/widget/daycell.dart';
+import 'package:intl/intl.dart';
+import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 class Calendar extends StatefulWidget {
   const Calendar({super.key});
@@ -27,8 +27,8 @@ class _CalendarState extends State<Calendar> {
 
   @override
   Widget build(BuildContext context) {
-    width = MediaQuery.of(context).size.width ;
-    cellWidth = ((width!-58) / 7);
+    width = MediaQuery.of(context).size.width;
+    cellWidth = ((width! - 58) / 7);
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(8),
@@ -52,11 +52,10 @@ class _CalendarState extends State<Calendar> {
                     child: Text(_headerText!,
                         textAlign: TextAlign.center,
                         style: const TextStyle(
-                            fontFamily:'Sora' ,
+                            fontFamily: 'Sora',
                             fontSize: 16,
                             color: Colors.black,
-                            fontWeight: FontWeight.bold
-                        )),
+                            fontWeight: FontWeight.bold)),
                   ),
                 ),
               ),
@@ -142,11 +141,10 @@ class _CalendarState extends State<Calendar> {
                 Padding(
                   padding: const EdgeInsets.only(left: 10, right: 10),
                   child: Container(
-                    child: Text(_text,
+                    child: Text(
+                      _text,
                       style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold
-                      ),
+                          fontSize: 16, fontWeight: FontWeight.bold),
                     ),
                   ),
                 )

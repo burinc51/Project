@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:gr_planner/controller/data_source.dart';
+import 'package:gr_planner/widget/daycell.dart';
+import 'package:gr_planner/widget/home/sidebar.dart';
 import 'package:intl/intl.dart';
-import 'package:project/controller/data_source.dart';
-import 'package:project/widget/daycell.dart';
-import 'package:project/widget/home/sidebar.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 class HomeScreen extends StatefulWidget {

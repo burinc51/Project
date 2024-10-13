@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:project/widget/daycell.dart';
-import 'package:syncfusion_flutter_calendar/calendar.dart';
-import 'package:intl/intl.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:gr_planner/widget/daycell.dart';
+import 'package:intl/intl.dart';
+import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 class Calendar extends StatefulWidget {
   const Calendar({super.key});
@@ -120,7 +120,8 @@ class _CalendarState extends State<Calendar> {
       for (int i = 0; i < dataSource.appointments!.length; i++) {
         Appointment appointment = dataSource.appointments![i] as Appointment;
 
-        final Appointment? occurrenceAppointment = dataSource.getOccurrenceAppointment(appointment, selectedDate!, '');
+        final Appointment? occurrenceAppointment =
+            dataSource.getOccurrenceAppointment(appointment, selectedDate!, '');
         if ((DateTime(appointment.startTime.year, appointment.startTime.month,
                     appointment.startTime.day) ==
                 DateTime(
@@ -134,7 +135,8 @@ class _CalendarState extends State<Calendar> {
 
       if (dataSource.appointments!.isNotEmpty) {
         print(width);
-        String _DateAndMounth = DateFormat('dd MMMM yyyy').format(selectedDate!).toString();
+        String _DateAndMounth =
+            DateFormat('dd MMMM yyyy').format(selectedDate!).toString();
         showModalBottomSheet(
           context: context,
           isScrollControlled: true,
@@ -195,7 +197,8 @@ class _CalendarState extends State<Calendar> {
                                       _appointmentDetails[index].isAllDay
                                           ? ''
                                           : DateFormat('hh:mm a').format(
-                                          _appointmentDetails[index].startTime),
+                                              _appointmentDetails[index]
+                                                  .startTime),
                                       textAlign: TextAlign.center,
                                       style: const TextStyle(
                                           fontWeight: FontWeight.w600,
@@ -213,7 +216,8 @@ class _CalendarState extends State<Calendar> {
                                       _appointmentDetails[index].isAllDay
                                           ? ''
                                           : DateFormat('hh:mm a').format(
-                                          _appointmentDetails[index].endTime),
+                                              _appointmentDetails[index]
+                                                  .endTime),
                                       textAlign: TextAlign.center,
                                       style: const TextStyle(
                                           fontWeight: FontWeight.w600,
@@ -226,8 +230,7 @@ class _CalendarState extends State<Calendar> {
                                   size: 30,
                                   color: Colors.white,
                                 ),
-                                title: Text(
-                                    _appointmentDetails[index].subject,
+                                title: Text(_appointmentDetails[index].subject,
                                     textAlign: TextAlign.center,
                                     style: const TextStyle(
                                         fontWeight: FontWeight.w600,
@@ -235,17 +238,15 @@ class _CalendarState extends State<Calendar> {
                               ));
                         },
                         separatorBuilder: (BuildContext context, int index) =>
-                        const Divider(
-                          height: 5,
-                        )
-                    ))
+                            const Divider(
+                              height: 5,
+                            )))
                 // LayoutBuilder(builder: (BuildContext context,)),
               ],
             ),
           ),
         ).whenComplete(() {});
       }
-
     });
   }
 
@@ -309,8 +310,6 @@ class _CalendarState extends State<Calendar> {
     }
   }
 
-
-
   _DataSource getCalendarDataSource() {
     final List<Appointment> appointments = <Appointment>[];
 
@@ -319,8 +318,7 @@ class _CalendarState extends State<Calendar> {
         endTime: DateTime.now().add(const Duration(hours: 1)),
         subject: 'Recurrence',
         color: Colors.red,
-        recurrenceRule: 'FREQ=DAILY;INTERVAL=2;COUNT=10'
-    ));
+        recurrenceRule: 'FREQ=DAILY;INTERVAL=2;COUNT=10'));
 
     appointments.add(Appointment(
         startTime: DateTime.now().add(const Duration(hours: 4, days: -1)),
@@ -410,4 +408,3 @@ class _DataSource extends CalendarDataSource {
     appointments = source;
   }
 }
-

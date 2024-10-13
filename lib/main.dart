@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:project/route.dart';
-import 'package:project/screens/main/main_screen.dart';
-import 'package:project/themes/theme.dart';
+import 'package:gr_planner/route.dart';
+import 'package:gr_planner/screens/main/main_screen.dart';
+import 'package:gr_planner/themes/theme.dart';
 
 void main() {
-  return runApp( const MyApp());
+  return runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -20,6 +20,6 @@ class MyApp extends StatelessWidget {
       initialRoute: GetRoutes.index,
       getPages: GetRoutes.routes,
       home: MainScreen(),
-    ); 
+    );
   }
 }

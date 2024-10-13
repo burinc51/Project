@@ -1,8 +1,8 @@
 import 'package:get/get.dart';
-import 'package:project/screens/group/group_screen.dart';
-import 'package:project/screens/home/home_screen.dart';
-import 'package:project/screens/note/note_screen.dart';
-import 'package:project/screens/main/main_screen.dart';
+import 'package:gr_planner/screens/group/group_screen.dart';
+import 'package:gr_planner/screens/home/home_screen.dart';
+import 'package:gr_planner/screens/main/main_screen.dart';
+import 'package:gr_planner/screens/note/note_screen.dart';
 
 class GetRoutes {
   static const String index = "/";
