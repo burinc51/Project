@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:get/get.dart';
 import 'package:gr_planner/controller/data_source.dart';
 import 'package:gr_planner/widget/daycell.dart';
 import 'package:gr_planner/widget/home/sidebar.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
+import '../../route.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -125,81 +127,71 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget monthCellBuilder(BuildContext context, MonthCellDetails details) {
-    if (details.date.day == 1 && !monthChk) {
-      monthChk = true;
-    } else if (details.date.day == 1 && monthChk) {
-      monthChk = false;
+    bool isToday = details.date.day == DateTime.now().day &&
+        details.date.month == DateTime.now().month;
+    bool isFirstDayOfMonth = details.date.day == 1;
+
+    if (isFirstDayOfMonth) {
+      monthChk = !monthChk;
     }
 
-    if (details.date.day == DateTime.now().day &&
-        details.date.month == DateTime.now().month) {
-      return Container(
-        alignment: Alignment.topCenter,
-        padding: const EdgeInsets.only(top: 3),
-        decoration: const BoxDecoration(
-            border: Border(
+    return Container(
+      alignment: Alignment.topCenter,
+      padding: EdgeInsets.only(top: isToday ? 3 : 7.5),
+      decoration: const BoxDecoration(
+        border: Border(
           top: BorderSide(color: Colors.black12, width: 1),
-        )),
-        child: Container(
-            decoration: BoxDecoration(
-              color: Colors.black,
-              border: Border.all(
+        ),
+      ),
+      child: isToday
+          ? Container(
+              width: 30,
+              height: 30,
+              decoration: BoxDecoration(
                 color: Colors.black,
-                width: 5,
+                border: Border.all(color: Colors.black, width: 5),
+                borderRadius: BorderRadius.circular(15),
               ),
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Text(
+              child: Center(
+                child: Text(
+                  details.date.day.toString(),
+                  style: const TextStyle(color: Colors.white),
+                ),
+              ),
+            )
+          : Text(
               details.date.day.toString(),
-              style: const TextStyle(color: Colors.white),
-            )),
-      );
-    }
-    if (monthChk) {
-      return Container(
-        alignment: Alignment.topCenter,
-        padding: const EdgeInsets.only(top: 7.5),
-        decoration: const BoxDecoration(
-            border: Border(
-          top: BorderSide(color: Colors.black12, width: 1),
-        )),
-        child: Text(
-          details.date.day.toString(),
-          style: const TextStyle(fontSize: 16, color: Colors.black),
-        ),
-      );
-    } else {
-      return Container(
-        alignment: Alignment.topCenter,
-        padding: const EdgeInsets.only(top: 7.5),
-        decoration: const BoxDecoration(
-            border: Border(
-          top: BorderSide(color: Colors.black12, width: 1),
-        )),
-        child: Text(
-          details.date.day.toString(),
-          style: const TextStyle(fontSize: 16, color: Colors.black45),
-        ),
-      );
-    }
+              style: TextStyle(
+                fontSize: 16,
+                color: monthChk ? Colors.black : Colors.black45,
+              ),
+            ),
+    );
   }
 
+  // popup
   void selectionTap(CalendarTapDetails details) {
     _text = DateFormat('dd MMMM yyyy').format(details.date!).toString();
-    if (details.appointments != null && details.appointments!.isNotEmpty) {
-      details.appointments?.forEach((appointment) {
-        final Appointment meeting =
-            appointment as Appointment; // แปลงเป็น Meeting object
 
-        // ปริ้นข้อมูลภายใน Meeting object
-        print('Meeting Title: ${meeting.subject}');
-        print('All: ${meeting.isAllDay}');
-        print('from: ${meeting.startTime}');
-        print('to: ${meeting.endTime}');
-      });
-    } else {
-      print('No Appointments');
-    }
+    // debugPrint('''
+    //                       Calendar Tap Details:
+    //                         Date: ${details.date}
+    //                         Appointments: ${details.appointments}
+    //                       ''');
+    // if (details.appointments != null && details.appointments!.isNotEmpty) {
+    //   details.appointments?.forEach((appointment) {
+    //     final Appointment meeting =
+    //         appointment as Appointment; // แปลงเป็น Meeting object
+
+    //     // ปริ้นข้อมูลภายใน Meeting object
+    //     print('Meeting Title: ${meeting.subject}');
+    //     print('All: ${meeting.isAllDay}');
+    //     print('from: ${meeting.startTime}');
+    //     print('to: ${meeting.endTime}');
+    //   });
+    // } else {
+    //   print('No Appointments');
+    // }
 
     showModalBottomSheet(
       context: context,
@@ -258,9 +250,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         return Padding(
                           padding: const EdgeInsets.all(10),
                           child: InkWell(
-                            onTap: () {
-                              print('111111111');
-                            },
+                            onTap: () =>
+                                Get.toNamed(GetRoutes.event, arguments: { 'appointment' : meeting}),
                             child: Row(
                               children: [
                                 if (!meeting.isAllDay)

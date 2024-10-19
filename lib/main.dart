@@ -19,7 +19,6 @@ class MyApp extends StatelessWidget {
       theme: appTheme(),
       initialRoute: GetRoutes.login,
       getPages: GetRoutes.routes,
-      home: MainScreen(),
-    );
+    ); 
   }
 }
