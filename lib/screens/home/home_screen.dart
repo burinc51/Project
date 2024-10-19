@@ -251,7 +251,12 @@ class _HomeScreenState extends State<HomeScreen> {
                           padding: const EdgeInsets.all(10),
                           child: InkWell(
                             onTap: () =>
-                                Get.toNamed(GetRoutes.event, arguments: { 'appointment' : meeting}),
+                                Get.toNamed(GetRoutes.event, arguments: {
+                              'startTime': meeting.startTime,
+                              'endTime': meeting.endTime,
+                              'isAllDay': meeting.isAllDay,
+                              'title': meeting.subject,
+                            }),
                             child: Row(
                               children: [
                                 if (!meeting.isAllDay)

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'dart:developer' as developer;
+import 'package:intl/intl.dart';
 
 class EventDetailsScreen extends StatefulWidget {
   const EventDetailsScreen({super.key});
@@ -10,25 +11,30 @@ class EventDetailsScreen extends StatefulWidget {
 }
 
 class _EventDetailsScreenState extends State<EventDetailsScreen> {
-  late DateTime? selectedDate;
-  dynamic appointment;
+  bool isAllDay = false;
+  String title = '', dateStart = '', dateEnd = '', timeStart = '', timeEnd = '';
 
   @override
   void initState() {
     super.initState();
+
     // รับค่า arguments ใน initState
     final args = Get.arguments;
 
-    // กำหนดค่าให้ตัวแปร
-    selectedDate = args['selectedDate'];
-    appointment = args['appointment'];
+    DateTime? start = args['startTime'];
+    DateTime? end = args['endTime'];
+
+    isAllDay = args['isAllDay'];
+    title = args['title'];
+    dateStart = DateFormat('EEE, M/d/y').format(start!);
+    dateEnd = DateFormat('EEE, M/d/y').format(end!);
+    timeStart = DateFormat('HH:mm').format(start);
+    timeEnd = DateFormat('HH:mm').format(end);
+    
   }
 
   @override
   Widget build(BuildContext context) {
-    developer.log(
-      '$appointment',
-    );
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -52,8 +58,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
           children: [
             Center(
               child: Column(
-                crossAxisAlignment:
-                    CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Center(
                     child: Container(
@@ -75,12 +80,11 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                       ),
                     ),
                   ),
-                  const SizedBox(
-                      height: 8),
-                  const Center(
+                  const SizedBox(height: 8),
+                  Center(
                     child: Text(
-                      'Hhgh',
-                      style: TextStyle(
+                      title,
+                      style: const TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
                       ),
@@ -93,7 +97,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
             const SizedBox(height: 24),
 
             // Date and Time Section
-            const Row(
+            Row(
               children: [
                 Expanded(
                   child: Center(
@@ -101,15 +105,15 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Sun, 9/29/2024',
-                          style: TextStyle(
+                          dateStart,
+                          style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w500,
                           ),
                         ),
                         Text(
-                          '22:00',
-                          style: TextStyle(
+                          timeStart,
+                          style: const TextStyle(
                             fontSize: 24,
                             fontWeight: FontWeight.bold,
                           ),
@@ -118,22 +122,22 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                     ),
                   ),
                 ),
-                Icon(Icons.arrow_forward, color: Colors.black54),
+                const Icon(Icons.arrow_forward, color: Colors.black54),
                 Expanded(
                   child: Center(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Tue, 10/29/2024',
-                          style: TextStyle(
+                          dateEnd,
+                          style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w500,
                           ),
                         ),
                         Text(
-                          '23:00',
-                          style: TextStyle(
+                          timeEnd,
+                          style: const TextStyle(
                             fontSize: 24,
                             fontWeight: FontWeight.bold,
                           ),
