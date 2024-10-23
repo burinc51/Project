@@ -6,6 +6,7 @@ import 'package:gr_planner/widget/daycell.dart';
 import 'package:gr_planner/widget/home/sidebar.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
+
 import '../../route.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -38,7 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       key: _scaffoldKey,
       // sidebar menu
-      drawer: Drawer(width: width! * 0.5, child: const Siderbar()),
+      drawer: Drawer(width: width! * 0.9, child: const Siderbar()),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(8),
