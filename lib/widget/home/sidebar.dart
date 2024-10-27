@@ -7,19 +7,21 @@ class Siderbar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Drawer(
       child: Container(
-        color: Colors.black,
+        color: const Color(0xFFF5F5F5), // Light grey background for the drawer
         child: ListView(
           padding: EdgeInsets.zero,
           children: <Widget>[
             // Profile Header
             Container(
               padding: const EdgeInsets.all(16),
+              color: const Color(0xFFE0E0E0), // Slightly darker grey for header
               child: Row(
                 children: [
                   // Profile Image
                   CircleAvatar(
                     radius: 30,
-                    backgroundImage: AssetImage('asset/images/logoGR.png'),
+                    backgroundImage:
+                        const AssetImage('asset/images/logoGR.png'),
                   ),
                   const SizedBox(width: 16),
                   // Profile Info
@@ -30,7 +32,7 @@ class Siderbar extends StatelessWidget {
                         Text(
                           'GOT RYU',
                           style: TextStyle(
-                            color: Colors.white,
+                            color: Colors.black,
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                           ),
@@ -38,7 +40,7 @@ class Siderbar extends StatelessWidget {
                         Text(
                           'gotryu.contact@gmail.com',
                           style: TextStyle(
-                            color: Colors.grey,
+                            color: Colors.black54,
                             fontSize: 14,
                           ),
                         ),
@@ -49,7 +51,7 @@ class Siderbar extends StatelessWidget {
                   IconButton(
                     icon: const Icon(
                       Icons.settings,
-                      color: Color(0xFF79AC78),
+                      color: Color(0xFF6D9B6A), // Softer green
                     ),
                     onPressed: () {},
                   ),
@@ -70,28 +72,26 @@ class Siderbar extends StatelessWidget {
               ),
             ),
 
-            // Banner
-
             // List Items
             const ListTile(
-              leading: Icon(Icons.person, color: Color(0xFF79AC78)),
-              title: Text('ส่วนตัว', style: TextStyle(color: Colors.white)),
-              trailing: Icon(Icons.chevron_right, color: Colors.grey),
+              leading: Icon(Icons.person, color: Color(0xFF6D9B6A)),
+              title: Text('ส่วนตัว', style: TextStyle(color: Colors.black87)),
+              trailing: Icon(Icons.chevron_right, color: Colors.black54),
             ),
             const ListTile(
-              leading: Icon(Icons.group, color: Color(0xFF79AC78)),
-              title: Text('ครอบครัว', style: TextStyle(color: Colors.white)),
-              trailing: Icon(Icons.chevron_right, color: Colors.grey),
+              leading: Icon(Icons.group, color: Color(0xFF6D9B6A)),
+              title: Text('ครอบครัว', style: TextStyle(color: Colors.black87)),
+              trailing: Icon(Icons.chevron_right, color: Colors.black54),
             ),
             const ListTile(
-              leading: Icon(Icons.work, color: Color(0xFF79AC78)),
-              title: Text('ตารางงาน', style: TextStyle(color: Colors.white)),
-              trailing: Icon(Icons.chevron_right, color: Colors.grey),
+              leading: Icon(Icons.work, color: Color(0xFF6D9B6A)),
+              title: Text('ตารางงาน', style: TextStyle(color: Colors.black87)),
+              trailing: Icon(Icons.chevron_right, color: Colors.black54),
             ),
             const ListTile(
-              leading: Icon(Icons.school, color: Color(0xFF79AC78)),
-              title: Text('ชั้นเรียน', style: TextStyle(color: Colors.white)),
-              trailing: Icon(Icons.chevron_right, color: Colors.grey),
+              leading: Icon(Icons.school, color: Color(0xFF6D9B6A)),
+              title: Text('ชั้นเรียน', style: TextStyle(color: Colors.black87)),
+              trailing: Icon(Icons.chevron_right, color: Colors.black54),
             ),
           ],
         ),
@@ -104,13 +104,13 @@ class Siderbar extends StatelessWidget {
       children: [
         Icon(
           icon,
-          color: const Color(0xFF79AC78),
+          color: const Color(0xFF6D9B6A), // Softer green for icons
         ),
         const SizedBox(height: 4),
         Text(
           label,
           style: const TextStyle(
-            color: Colors.white,
+            color: Colors.black87, // Darker grey for text
             fontSize: 12,
           ),
         ),

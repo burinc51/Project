@@ -28,6 +28,8 @@ class MainScreen extends GetView<BottomNavController> {
         () => BottomNavigationBar(
           currentIndex: controller.currentIndex.value,
           onTap: controller.changePage,
+          selectedItemColor: Color(0xFF6D9B6A),
+          unselectedItemColor: Colors.grey,
           items: const [
             BottomNavigationBarItem(
               icon: Icon(Icons.home),
